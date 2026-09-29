@@ -40,7 +40,7 @@ ENV NODE_ENV=production \
     EDGE_EVER_BUILD_ID=${EDGE_EVER_BUILD_ID} \
     EDGE_EVER_DATA_DIR=/data \
     EDGE_EVER_WEB_DIR=/app/apps/web/dist \
-    PORT=8787
+    PORT=4000
 
 LABEL org.opencontainers.image.title="EdgeEver" \
       org.opencontainers.image.description="Self-hosted notes and knowledge management" \
@@ -57,7 +57,7 @@ RUN mkdir -p /data \
   && chown -R bun:bun /data
 USER bun
 VOLUME ["/data"]
-EXPOSE 8787
+EXPOSE 4000
 STOPSIGNAL SIGTERM
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD bun -e "const r=await fetch('http://127.0.0.1:8787/api/health');if(!r.ok)process.exit(1)"

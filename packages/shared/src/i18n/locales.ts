@@ -3,7 +3,7 @@ export const supportedLocales = ["zh-CN", "en-US", "ja"] as const;
 export type SupportedLocale = (typeof supportedLocales)[number];
 
 /** Used when there is no locale evidence (legacy callers, missing headers). */
-export const defaultLocale: SupportedLocale = "zh-CN";
+export const defaultLocale: SupportedLocale = "en-US";
 
 /** Used when locale evidence exists but is not a shipped UI language. */
 export const unmatchedLocale: SupportedLocale = "en-US";

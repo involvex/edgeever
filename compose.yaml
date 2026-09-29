@@ -1,21 +1,44 @@
 services:
   edgeever:
-    image: "${EDGE_EVER_IMAGE:-ghcr.io/tianma-if/edgeever}:${EDGE_EVER_VERSION:-latest}"
+    image: "${EDGE_EVER_IMAGE:-edgeever}:${EDGE_EVER_VERSION:-local}"
     restart: unless-stopped
     init: true
     ports:
-      - "${EDGE_EVER_PORT:-8787}:8787"
+      - "${EDGE_EVER_PORT:-4000}:4000"
     environment:
       EDGE_EVER_AUTH_USERNAME: "${EDGE_EVER_AUTH_USERNAME:-admin}"
       EDGE_EVER_AUTH_PASSWORD: "${EDGE_EVER_AUTH_PASSWORD:?Set EDGE_EVER_AUTH_PASSWORD before starting EdgeEver}"
       EDGE_EVER_CONTAINER_IMAGE: "${EDGE_EVER_IMAGE:-ghcr.io/tianma-if/edgeever}"
     volumes:
+      # Main persistent data directory: database, cache, and application state
       - edgeever-data:/data
+      # Optional: Separate media/attachments volume for easier backups and management
+      - edgeever-media:/data/media
+      # Optional: Database backups directory
+      - edgeever-backups:/data/backups
+    # Volume mount examples for Docker on host (uncomment to use):
+    # volumes:
+    #   - ./data:/data
+    #   - ./media:/data/media
+    #   - ./backups:/data/backups
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
     stop_grace_period: 30s
+    # Optional: Set memory limit to prevent runaway processes
+    # memswap_limit: 2g
+    # mem_limit: 1g
 
 volumes:
+  # Main volume for all persistent application data
   edgeever-data:
+    driver: local
+  
+  # Separate volume for media/attachments (recommended for large libraries)
+  edgeever-media:
+    driver: local
+  
+  # Backup volume for snapshots and exports
+  edgeever-backups:
+    driver: local

@@ -6,6 +6,7 @@
 .idea
 .wrangler*
 node_modules
+**/node_modules
 release
 target
 test-results
